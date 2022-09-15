@@ -1,0 +1,1149 @@
+{
+	"info": {
+		"_postman_id": "171e2f7e-54c6-4ef5-b8f8-cfc5424634f6",
+		"name": "Work",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18878345"
+	},
+	"item": [
+		{
+			"name": "2.1.4.1 Проверка при подаче и снятии питания",
+			"item": [
+				{
+					"name": "2.1.4.1.1 Проверка отсутствия ложного срабатывания",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"/*modulePx = pm.environment.get(\"modulePx\")\r",
+									"var I_set = '\"5.5\"';\r",
+									"if (modulePx === \"P1\" || modulePx === \"P3\") {\r",
+									"    I_set = '\"5.25\"';\r",
+									"} else if (modulePx === \"P2\"  || modulePx === \"P4\") {\r",
+									"    I_set = '\"1.05\"';\r",
+									"}*/\r",
+									"I_set = String(pm.environment.get(\"Inom\") * 1.05)\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.MTZ1.XB2\",\"value\":\"0\"} ,{\"name\":\"LOC.MTZ1.XB3\",\"value\":\"0\"},\t{\"name\":\"LOC.MTZ1.XB6\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB7\",\"value\":\"0\"},{\"name\":\"LOC.MTZ1.I_set\",\"value\":\"' + I_set + '\"}, {\"name\":\"LOC.MTZ1.T1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.Mode\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.Mode_return\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.1.4.1.2 Проверка быстродействия срабатывания защит",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"I_set = String(pm.environment.get(\"Inom\"))\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"1\"}, {\"name\": \"LOC.DZ1.XB2\",\"value\": \"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.MTZ1.XB2\",\"value\":\"0\"} ,{\"name\":\"LOC.MTZ1.XB3\",\"value\":\"0\"},\t{\"name\":\"LOC.MTZ1.XB6\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB7\",\"value\":\"0\"},{\"name\":\"LOC.MTZ1.I_set\",\"value\":\"' + I_set + '\"}, {\"name\":\"LOC.MTZ1.T1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.Mode\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.Mode_return\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2.1.4.2  Комплексное испытание ДЗ",
+			"item": [
+				{
+					"name": "2.1.4.2.1 Проверка зоны срабатывания ДЗ",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"I_set1 = String(pm.environment.get(\"Inom\") * 0.1)\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB3\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB4\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB5\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB6\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB7\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB8\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB9\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB10\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB11\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.K_set\",\"value\":\"0.05\"}, {\"name\":\"LOC.DZ1.I_set1\",\"value\":\"' + I_set1 + '\"}, {\"name\":\"LOC.DZ1.I_set2\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.I0_set\",\"value\":\"10\"}, {\"name\":\"LOC.DZ1.U_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.R_set\",\"value\":\"40\"}, {\"name\":\"LOC.DZ1.X_set\",\"value\":\"40\"}, {\"name\":\"LOC.DZ1.R0_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.X0_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.ang1\",\"value\":\"70\"}, {\"name\":\"LOC.DZ1.ang2\",\"value\":\"-15\"}, {\"name\":\"LOC.DZ1.ang3\",\"value\":\"110\"}, {\"name\":\"LOC.DZ1.ang4\",\"value\":\"-5\"}, {\"name\":\"LOC.DZ1.ang1g\",\"value\":\"75\"}, {\"name\":\"LOC.DZ1.R_load\",\"value\":\"30\"}, {\"name\":\"LOC.DZ1.ang_load\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.T1\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.T2\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.T3\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.Kr\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kx\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kmr\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kmx\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.1.4.2.2 Проверка коэффициента ненаправленной ступени ДЗ",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"modulePx = pm.environment.get(\"modulePx\")\r",
+									"var X_set = \"0\";\r",
+									"var R_load = \"0\";\r",
+									"if (modulePx === \"P1\" || modulePx === \"P3\") {\r",
+									"    X_set = \"80\";\r",
+									"    R_load = \"80\";\r",
+									"} else if (modulePx === \"P2\"  || modulePx === \"P4\") {\r",
+									"    X_set = \"400\";\r",
+									"    R_load = \"400\";\r",
+									"}\r",
+									"\r",
+									"I_set1 = String(pm.environment.get(\"Inom\") * 0.1)\r",
+									"R_set = String(0.5 * 100 /(pm.environment.get(\"Inom\")))\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB3\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB4\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB5\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB6\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB7\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB8\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB9\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB10\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB11\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.K_set\",\"value\":\"0.05\"}, {\"name\":\"LOC.DZ1.I_set1\",\"value\":\"' + I_set1 + '\"}, {\"name\":\"LOC.DZ1.I_set2\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.I0_set\",\"value\":\"10\"}, {\"name\":\"LOC.DZ1.U_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.R_set\",\"value\":\"' + R_set + '\"}, {\"name\":\"LOC.DZ1.X_set\",\"value\":\"' + X_set + '\"}, {\"name\":\"LOC.DZ1.R0_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.X0_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.ang1\",\"value\":\"90\"}, {\"name\":\"LOC.DZ1.ang2\",\"value\":\"-30\"}, {\"name\":\"LOC.DZ1.ang3\",\"value\":\"110\"}, {\"name\":\"LOC.DZ1.ang4\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.ang1g\",\"value\":\"75\"}, {\"name\":\"LOC.DZ1.R_load\",\"value\":\"' + R_load + '\"}, {\"name\":\"LOC.DZ1.ang_load\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.T1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.T2\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.T3\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.Kr\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kx\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kmr\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kmx\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.1.4.2.3 Проверка блокировки от БНН",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Выбор максимальных значений сопротивлений\r",
+									"modulePx = pm.environment.get(\"modulePx\")\r",
+									"var X_set = \"0\";\r",
+									"var R_load = \"0\";\r",
+									"if (modulePx === \"P1\" || modulePx === \"P3\") {\r",
+									"    X_set = \"80\";\r",
+									"    R_load = \"80\";\r",
+									"} else if (modulePx === \"P2\"  || modulePx === \"P4\") {\r",
+									"    X_set = \"400\";\r",
+									"    R_load = \"400\";\r",
+									"}\r",
+									"\r",
+									"I_set1 = String(pm.environment.get(\"Inom\"))\r",
+									"R_set = String(100 /(pm.environment.get(\"Inom\"))) \r",
+									"\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB3\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB4\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB5\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB6\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB7\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB8\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB9\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB10\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB11\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.K_set\",\"value\":\"0.05\"}, {\"name\":\"LOC.DZ1.I_set1\",\"value\":\"' + I_set1 + '\"}, {\"name\":\"LOC.DZ1.I_set2\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.I0_set\",\"value\":\"10\"}, {\"name\":\"LOC.DZ1.U_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.R_set\",\"value\":\"' + R_set + '\"}, {\"name\":\"LOC.DZ1.X_set\",\"value\":\"' + X_set + '\"}, {\"name\":\"LOC.DZ1.R0_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.X0_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.ang1\",\"value\":\"90\"}, {\"name\":\"LOC.DZ1.ang2\",\"value\":\"-30\"}, {\"name\":\"LOC.DZ1.ang3\",\"value\":\"110\"}, {\"name\":\"LOC.DZ1.ang4\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.ang1g\",\"value\":\"75\"}, {\"name\":\"LOC.DZ1.R_load\",\"value\":\"' + R_load + '\"}, {\"name\":\"LOC.DZ1.ang_load\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.T1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.T2\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.T3\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.Kr\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kx\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kmr\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kmx\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.BNN.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.U2_set\",\"value\":\"30\"}, {\"name\":\"LOC.BNN.Umin_set\",\"value\":\"10\"},{\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.1.4.2.4 Проверка блокировки от БНТ",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Выбор максимальных значений сопротивлений\r",
+									"modulePx = pm.environment.get(\"modulePx\")\r",
+									"var X_set = \"0\";\r",
+									"var R_load = \"0\";\r",
+									"if (modulePx === \"P1\" || modulePx === \"P3\") {\r",
+									"    X_set = \"80\";\r",
+									"    R_load = \"80\";\r",
+									"} else if (modulePx === \"P2\"  || modulePx === \"P4\") {\r",
+									"    X_set = \"400\";\r",
+									"    R_load = \"400\";\r",
+									"}\r",
+									"\r",
+									"I_set1 = String(pm.environment.get(\"Inom\"))\r",
+									"R_set = String(100 /(pm.environment.get(\"Inom\"))) \r",
+									"I_max = String(pm.environment.get(\"Inom\") * 4)\r",
+									"I0_max = String(pm.environment.get(\"I0nom\") * 2)\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB3\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB4\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB5\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB6\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB7\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB8\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB9\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB10\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB11\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.K_set\",\"value\":\"0.05\"}, {\"name\":\"LOC.DZ1.I_set1\",\"value\":\"' + I_set1 + '\"}, {\"name\":\"LOC.DZ1.I_set2\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.I0_set\",\"value\":\"10\"}, {\"name\":\"LOC.DZ1.U_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.R_set\",\"value\":\"' + R_set + '\"}, {\"name\":\"LOC.DZ1.X_set\",\"value\":\"' + X_set + '\"}, {\"name\":\"LOC.DZ1.R0_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.X0_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.ang1\",\"value\":\"90\"}, {\"name\":\"LOC.DZ1.ang2\",\"value\":\"-30\"}, {\"name\":\"LOC.DZ1.ang3\",\"value\":\"110\"}, {\"name\":\"LOC.DZ1.ang4\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.ang1g\",\"value\":\"75\"}, {\"name\":\"LOC.DZ1.R_load\",\"value\":\"' + R_load + '\"}, {\"name\":\"LOC.DZ1.ang_load\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.T1\",\"value\":\"0.03\"}, {\"name\":\"LOC.DZ1.T2\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.T3\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.Kr\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kx\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kmr\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kmx\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.BNT.XB2\",\"value\":\"0\"},{\"name\":\"LOC.BNT.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.K_set\",\"value\":\"15\"}, {\"name\":\"LOC.BNT.I_max\",\"value\":\"' + I_max + '\"}, {\"name\":\"LOC.BNT.I0_max\",\"value\":\"' + I0_max + '\"}, {\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.1.4.2.5 Проверка памяти при близких междуфазных КЗ",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Выбор максимальных значений сопротивлений\r",
+									"modulePx = pm.environment.get(\"modulePx\")\r",
+									"var R_set = \"0\";\r",
+									"var X_set = \"0\";\r",
+									"var R_load = \"0\";\r",
+									"if (modulePx === \"P1\" || modulePx === \"P3\") {\r",
+									"    R_set = \"80\";\r",
+									"    X_set = \"80\";\r",
+									"    R_load = \"80\";\r",
+									"} else if (modulePx === \"P2\"  || modulePx === \"P4\") {\r",
+									"    R_set = \"400\";\r",
+									"    X_set = \"400\";\r",
+									"    R_load = \"400\";\r",
+									"}\r",
+									"\r",
+									"I_set1 = String(pm.environment.get(\"Inom\") * 0.1)\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB3\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB4\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB5\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB6\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB7\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB8\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB9\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB10\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB11\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.K_set\",\"value\":\"0.05\"}, {\"name\":\"LOC.DZ1.I_set1\",\"value\":\"' + I_set1 + '\"}, {\"name\":\"LOC.DZ1.I_set2\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.I0_set\",\"value\":\"10\"}, {\"name\":\"LOC.DZ1.U_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.R_set\",\"value\":\"' + R_set + '\"}, {\"name\":\"LOC.DZ1.X_set\",\"value\":\"' + X_set + '\"}, {\"name\":\"LOC.DZ1.R0_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.X0_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.ang1\",\"value\":\"90\"}, {\"name\":\"LOC.DZ1.ang2\",\"value\":\"-30\"}, {\"name\":\"LOC.DZ1.ang3\",\"value\":\"110\"}, {\"name\":\"LOC.DZ1.ang4\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.ang1g\",\"value\":\"75\"}, {\"name\":\"LOC.DZ1.R_load\",\"value\":\"' + R_load + '\"}, {\"name\":\"LOC.DZ1.ang_load\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.T1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.T2\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.T3\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.Kr\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kx\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kmr\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kmx\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.1.4.2.6 Проверка памяти при близких КЗ на землю",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Выбор максимальных значений сопротивлений\r",
+									"modulePx = pm.environment.get(\"modulePx\")\r",
+									"var R_set = \"0\";\r",
+									"var X_set = \"0\";\r",
+									"var R0_set = \"0\";\r",
+									"var X0_set = \"0\";\r",
+									"var R_load = \"0\";\r",
+									"if (modulePx === \"P1\" || modulePx === \"P3\") {\r",
+									"    R_set = \"80\";\r",
+									"    X_set = \"80\";\r",
+									"    R0_set = \"80\";\r",
+									"    X0_set = \"80\";\r",
+									"    R_load = \"80\";\r",
+									"} else if (modulePx === \"P2\"  || modulePx === \"P4\") {\r",
+									"    R_set = \"400\";\r",
+									"    X_set = \"400\";\r",
+									"    R0_set = \"400\";\r",
+									"    X0_set = \"400\";\r",
+									"    R_load = \"400\";\r",
+									"}\r",
+									"\r",
+									"I_set1 = String(pm.environment.get(\"Inom\") * 5)\r",
+									"I0_set = String(pm.environment.get(\"Inom\") * 0.1)\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB2\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB3\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB4\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB5\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB6\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB7\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB8\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB9\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB10\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB11\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.K_set\",\"value\":\"0.05\"}, {\"name\":\"LOC.DZ1.I_set1\",\"value\":\"' + I_set1 + '\"}, {\"name\":\"LOC.DZ1.I_set2\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.I0_set\",\"value\":\"' + I0_set + '\"}, {\"name\":\"LOC.DZ1.U_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.R_set\",\"value\":\"' + R_set + '\"}, {\"name\":\"LOC.DZ1.X_set\",\"value\":\"' + X_set + '\"}, {\"name\":\"LOC.DZ1.R0_set\",\"value\":\"' + R0_set + '\"}, {\"name\":\"LOC.DZ1.X0_set\",\"value\":\"' + X0_set + '\"}, {\"name\":\"LOC.DZ1.ang1\",\"value\":\"90\"}, {\"name\":\"LOC.DZ1.ang2\",\"value\":\"-30\"}, {\"name\":\"LOC.DZ1.ang3\",\"value\":\"110\"}, {\"name\":\"LOC.DZ1.ang4\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.ang1g\",\"value\":\"90\"}, {\"name\":\"LOC.DZ1.R_load\",\"value\":\"' + R_load + '\"}, {\"name\":\"LOC.DZ1.ang_load\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.T1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.T2\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.T3\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.Kr\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kx\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kmr\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kmx\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.1.4.2.7 Проверка компенсации тока нулевой последовательности линии",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Выбор максимальных значений сопротивлений\r",
+									"modulePx = pm.environment.get(\"modulePx\")\r",
+									"var R_set = \"0\";\r",
+									"var X_set = \"0\";\r",
+									"var R0_set = \"0\";\r",
+									"var X0_set = \"0\";\r",
+									"var R_load = \"0\";\r",
+									"if (modulePx === \"P1\" || modulePx === \"P3\") {\r",
+									"    R_set = \"80\";\r",
+									"    X_set = \"80\";\r",
+									"    R0_set = \"80\";\r",
+									"    X0_set = \"80\";\r",
+									"    R_load = \"80\";\r",
+									"} else if (modulePx === \"P2\"  || modulePx === \"P4\") {\r",
+									"    R_set = \"400\";\r",
+									"    X_set = \"400\";\r",
+									"    R0_set = \"400\";\r",
+									"    X0_set = \"400\";\r",
+									"    R_load = \"400\";\r",
+									"}\r",
+									"\r",
+									"I_set1 = String(pm.environment.get(\"Inom\") * 3)\r",
+									"I0_set = String(pm.environment.get(\"Inom\") * 0.05)\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB2\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB3\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB4\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB5\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB6\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB7\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB8\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB9\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB10\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB11\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.K_set\",\"value\":\"0.05\"}, {\"name\":\"LOC.DZ1.I_set1\",\"value\":\"' + I_set1 + '\"}, {\"name\":\"LOC.DZ1.I_set2\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.I0_set\",\"value\":\"' + I0_set + '\"}, {\"name\":\"LOC.DZ1.U_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.R_set\",\"value\":\"' + R_set + '\"}, {\"name\":\"LOC.DZ1.X_set\",\"value\":\"' + X_set + '\"}, {\"name\":\"LOC.DZ1.R0_set\",\"value\":\"15\"}, {\"name\":\"LOC.DZ1.X0_set\",\"value\":\"' + X0_set + '\"}, {\"name\":\"LOC.DZ1.ang1\",\"value\":\"90\"}, {\"name\":\"LOC.DZ1.ang2\",\"value\":\"-90\"}, {\"name\":\"LOC.DZ1.ang3\",\"value\":\"110\"}, {\"name\":\"LOC.DZ1.ang4\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.ang1g\",\"value\":\"90\"}, {\"name\":\"LOC.DZ1.R_load\",\"value\":\"' + R_load + '\"}, {\"name\":\"LOC.DZ1.ang_load\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.T1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.T2\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.T3\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.Kr\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kx\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kmr\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kmx\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.1.4.2.8 Проверка компенсации взаимоиндукции параллельной линии",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Выбор максимальных значений сопротивлений\r",
+									"modulePx = pm.environment.get(\"modulePx\")\r",
+									"var R_set = \"0\";\r",
+									"var X_set = \"0\";\r",
+									"var R0_set = \"0\";\r",
+									"var X0_set = \"0\";\r",
+									"var R_load = \"0\";\r",
+									"if (modulePx === \"P1\" || modulePx === \"P3\") {\r",
+									"    R_set = \"80\";\r",
+									"    X_set = \"80\";\r",
+									"    R0_set = \"80\";\r",
+									"    X0_set = \"80\";\r",
+									"    R_load = \"80\";\r",
+									"} else if (modulePx === \"P2\"  || modulePx === \"P4\") {\r",
+									"    R_set = \"400\";\r",
+									"    X_set = \"400\";\r",
+									"    R0_set = \"400\";\r",
+									"    X0_set = \"400\";\r",
+									"    R_load = \"400\";\r",
+									"}\r",
+									"\r",
+									"I_set1 = String(pm.environment.get(\"Inom\") * 3)\r",
+									"I0_set = String(pm.environment.get(\"Inom\") * 0.1)\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB2\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB3\",\"value\":\"1\"}, {\"name\":\"LOC.DZ1.XB4\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB5\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB6\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB7\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB8\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB9\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB10\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.XB11\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.K_set\",\"value\":\"0.05\"}, {\"name\":\"LOC.DZ1.I_set1\",\"value\":\"' + I_set1 + '\"}, {\"name\":\"LOC.DZ1.I_set2\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.I0_set\",\"value\":\"' + I0_set + '\"}, {\"name\":\"LOC.DZ1.U_set\",\"value\":\"5\"}, {\"name\":\"LOC.DZ1.R_set\",\"value\":\"' + R_set + '\"}, {\"name\":\"LOC.DZ1.X_set\",\"value\":\"' + X_set + '\"}, {\"name\":\"LOC.DZ1.R0_set\",\"value\":\"40\"}, {\"name\":\"LOC.DZ1.X0_set\",\"value\":\"40\"}, {\"name\":\"LOC.DZ1.ang1\",\"value\":\"90\"}, {\"name\":\"LOC.DZ1.ang2\",\"value\":\"-30\"}, {\"name\":\"LOC.DZ1.ang3\",\"value\":\"110\"}, {\"name\":\"LOC.DZ1.ang4\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.ang1g\",\"value\":\"70\"}, {\"name\":\"LOC.DZ1.R_load\",\"value\":\"' + R_load + '\"}, {\"name\":\"LOC.DZ1.ang_load\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.T1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.T2\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.T3\",\"value\":\"0.1\"}, {\"name\":\"LOC.DZ1.Kr\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kx\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kmr\",\"value\":\"0\"}, {\"name\":\"LOC.DZ1.Kmx\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2.1.4.3 Комплексное испытание ТО",
+			"item": [
+				{
+					"name": "2.1.4.3.1 (ТО) Проверка действия на сигнал или отключение",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"I_set = String(pm.environment.get(\"Inom\"))\r",
+									"\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.OverCurrent.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB4\",\"value\":\"1\"},{\"name\":\"LOC.OverCurrent.I_set\",\"value\":\"' + I_set +'\"}, {\"name\":\"LOC.OverCurrent.T1\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.T2\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.1.4.3.2 (ТО) Проверка блокировки по броску тока намагничивания",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"I_set = String(pm.environment.get(\"Inom\"))\r",
+									"I_max = String(pm.environment.get(\"Inom\") * 4)\r",
+									"I0_max = String(pm.environment.get(\"I0nom\") * 2)\r",
+									"\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.OverCurrent.XB2\",\"value\":\"1\"},{\"name\":\"LOC.OverCurrent.XB3\",\"value\":\"0\"},{\"name\":\"LOC.OverCurrent.XB4\",\"value\":\"1\"},{\"name\":\"LOC.OverCurrent.I_set\",\"value\":\"' + I_set +'\"},{\"name\":\"LOC.OverCurrent.T1\",\"value\":\"0.03\"},{\"name\":\"LOC.OverCurrent.T2\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.BNT.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.K_set\",\"value\":\"15\"},{\"name\":\"LOC.BNT.K0_set\",\"value\":\"15\"},{\"name\":\"LOC.BNT.I_max\",\"value\":\"' + I_max +'\"},{\"name\":\"LOC.BNT.I0_max\",\"value\":\"' + I0_max +'\"},{\"name\":\"LOC.BNT.T_cross_block\",\"value\":\"0.06\"},{\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2.1.4.4 Комплексное испытание МТЗ",
+			"item": [
+				{
+					"name": "2.1.4.4.1 (МТЗ) Проверка действия на сигнал или отключение",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"I_set = String(pm.environment.get(\"Inom\"))\r",
+									"\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"},  {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.MTZ1.XB2\",\"value\":\"0\"},{\"name\":\"LOC.MTZ1.XB3\",\"value\":\"0\"},{\"name\":\"LOC.MTZ1.XB4\",\"value\":\"1\"},{\"name\":\"LOC.MTZ1.XB5\",\"value\":\"1\"},{\"name\":\"LOC.MTZ1.XB6\",\"value\":\"0\"},{\"name\":\"LOC.MTZ1.XB7\",\"value\":\"0\"},{\"name\":\"LOC.MTZ1.XB8\",\"value\":\"0\"},{\"name\":\"LOC.MTZ1.XB9\",\"value\":\"0\"},{\"name\":\"LOC.MTZ1.I_set\",\"value\":\"' + I_set +'\"},{\"name\":\"LOC.MTZ1.I_set2\",\"value\":\"5\"},{\"name\":\"LOC.MTZ1.T1\",\"value\":\"0\"},{\"name\":\"LOC.MTZ1.T2\",\"value\":\"0\"},{\"name\":\"LOC.MTZ1.T3\",\"value\":\"0.25\"},{\"name\":\"LOC.MTZ1.T4\",\"value\":\"1\"},{\"name\":\"LOC.MTZ1.Mode\",\"value\":\"0\"},{\"name\":\"LOC.MTZ1.Mode_return\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.1.4.4.2 (МТЗ) Проверка контроля напряжения",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"I_set = String(pm.environment.get(\"Inom\"))\r",
+									"\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"},  {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.MTZ1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB3\",\"value\":\"1\"}, {\"name\":\"LOC.MTZ1.XB4\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB5\",\"value\":\"1\"}, {\"name\":\"LOC.MTZ1.XB6\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB7\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB8\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB9\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.I_set\",\"value\":\"' + I_set +'\"}, {\"name\":\"LOC.MTZ1.I_set2\",\"value\":\"5\"}, {\"name\":\"LOC.MTZ1.T1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.T2\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.T3\",\"value\":\"0.25\"}, {\"name\":\"LOC.MTZ1.T4\",\"value\":\"1\"}, {\"name\":\"LOC.MTZ1.Mode\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.Mode_return\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.Voltage_start.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.Voltage_start.U_set\",\"value\":\"70\"}, {\"name\":\"LOC.Voltage_start.U2_set\",\"value\":\"2\"}, {\"name\":\"LOC.TZNP1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.1.4.4.3 (МТЗ) Проверка блокировки по броску тока намагничивания",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"I_set = String(pm.environment.get(\"Inom\"))\r",
+									"I_max = String(pm.environment.get(\"Inom\") * 4)\r",
+									"I0_max = String(pm.environment.get(\"I0nom\") * 2)\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"},  {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.MTZ1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB4\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB5\",\"value\":\"1\"}, {\"name\":\"LOC.MTZ1.XB6\",\"value\":\"1\"}, {\"name\":\"LOC.MTZ1.XB7\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB8\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB9\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.I_set\",\"value\":\"' + I_set +'\"}, {\"name\":\"LOC.MTZ1.I_set2\",\"value\":\"5\"}, {\"name\":\"LOC.MTZ1.T1\",\"value\":\"0.03\"}, {\"name\":\"LOC.MTZ1.T2\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.T3\",\"value\":\"0.25\"}, {\"name\":\"LOC.MTZ1.T4\",\"value\":\"1\"}, {\"name\":\"LOC.MTZ1.Mode\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.Mode_return\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.Voltage_start.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.Voltage_start.U_set\",\"value\":\"70\"}, {\"name\":\"LOC.Voltage_start.U2_set\",\"value\":\"2\"}, {\"name\":\"LOC.TZNP1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.BNT.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.K_set\",\"value\":\"15\"},{\"name\":\"LOC.BNT.K0_set\",\"value\":\"15\"},{\"name\":\"LOC.BNT.I_max\",\"value\":\"' + I_max +'\"},{\"name\":\"LOC.BNT.I0_max\",\"value\":\"' + I0_max +'\"},{\"name\":\"LOC.BNT.T_cross_block\",\"value\":\"0.06\"}, {\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.1.4.4.4 (МТЗ) Проверка работы направленной МТЗ при близких КЗ",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"I_set = String(pm.environment.get(\"Inom\"))\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"},  {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.MTZ1.XB2\",\"value\":\"1\"}, {\"name\":\"LOC.MTZ1.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB4\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB5\",\"value\":\"1\"}, {\"name\":\"LOC.MTZ1.XB6\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB7\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB8\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.XB9\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.I_set\",\"value\":\"' + I_set +'\"}, {\"name\":\"LOC.MTZ1.I_set2\",\"value\":\"5\"}, {\"name\":\"LOC.MTZ1.T1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.T2\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.T3\",\"value\":\"0.25\"}, {\"name\":\"LOC.MTZ1.T4\",\"value\":\"1\"}, {\"name\":\"LOC.MTZ1.Mode\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ1.Mode_return\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.RNM_MTZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.RNM_MTZ.XB2\",\"value\":\"1\"},{\"name\":\"LOC.RNM_MTZ.T\",\"value\":\"0.1\"},{\"name\":\"LOC.RNM_MTZ.ang_max_sens\",\"value\":\"-45\"}, {\"name\":\"LOC.RNM_MTZ.ang_sector\",\"value\":\"85\"}, {\"name\":\"LOC.Voltage_start.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.Voltage_start.U_set\",\"value\":\"70\"}, {\"name\":\"LOC.Voltage_start.U2_set\",\"value\":\"2\"}, {\"name\":\"LOC.TZNP1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"0\"},  {\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2.1.4.5 Комплексное испытание ТЗНП",
+			"item": [
+				{
+					"name": "2.1.4.5.1 Проверка действия на сигнал или отключение",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"I_set = String(pm.environment.get(\"I0nom\"))\r",
+									"\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"},  {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.RNM_MTZ.XB1\",\"value\":\"2\"},{\"name\":\"LOC.TZNP1.XB1\",\"value\":\"1\"},{\"name\":\"LOC.TZNP1.XB2\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB3\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB4\",\"value\":\"1\"},{\"name\":\"LOC.TZNP1.XB5\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB6\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB7\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB8\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB9\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB10\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.I_set\",\"value\":\"' + I_set +'\"},{\"name\":\"LOC.TZNP1.U_set\",\"value\":\"10\"},{\"name\":\"LOC.TZNP1.T1\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.T2\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.T3\",\"value\":\"1\"},{\"name\":\"LOC.TZNP1.Mode\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.1.4.5.2 Проверка блокировки по броску тока намагничивания (измеренный ток 3I0)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"I_set = String(pm.environment.get(\"I0nom\") * 0.5)\r",
+									"I_max = String(pm.environment.get(\"Inom\") * 4)\r",
+									"I0_max = String(pm.environment.get(\"I0nom\") * 2)\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"},  {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.RNM_MTZ.XB1\",\"value\":\"2\"},{\"name\":\"LOC.TZNP1.XB1\",\"value\":\"1\"},{\"name\":\"LOC.TZNP1.XB2\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB3\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB4\",\"value\":\"1\"},{\"name\":\"LOC.TZNP1.XB5\",\"value\":\"1\"},{\"name\":\"LOC.TZNP1.XB6\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB7\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB8\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB9\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB10\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.I_set\",\"value\":\"' + I_set +'\"},{\"name\":\"LOC.TZNP1.U_set\",\"value\":\"10\"},{\"name\":\"LOC.TZNP1.T1\",\"value\":\"0.03\"},{\"name\":\"LOC.TZNP1.T2\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.T3\",\"value\":\"1\"},{\"name\":\"LOC.TZNP1.Mode\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.BNT.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.K_set\",\"value\":\"15\"},{\"name\":\"LOC.BNT.K0_set\",\"value\":\"15\"},{\"name\":\"LOC.BNT.I_max\",\"value\":\"' + I_max +'\"},{\"name\":\"LOC.BNT.I0_max\",\"value\":\"' + I0_max +'\"},{\"name\":\"LOC.BNT.T_cross_block\",\"value\":\"0.06\"}, {\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.1.4.5.3 Проверка блокировки по броску тока намагничивания (расчетный ток 3I0)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"I_set = String(pm.environment.get(\"Inom\") * 0.2)\r",
+									"I_max = String(pm.environment.get(\"Inom\") * 4)\r",
+									"I0_max = String(pm.environment.get(\"I0nom\") * 2)\r",
+									"\r",
+									"const uri = 'system_cswi_sgroups.html?active_group=&sg1=[{\"name\":\"LOC.DZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.DZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.BNN.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.OverCurrent.XB1\",\"value\":\"0\"},  {\"name\":\"LOC.MTZ1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.MTZ3.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.RNM_MTZ.XB1\",\"value\":\"2\"},{\"name\":\"LOC.TZNP1.XB1\",\"value\":\"1\"},{\"name\":\"LOC.TZNP1.XB2\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB3\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB4\",\"value\":\"1\"},{\"name\":\"LOC.TZNP1.XB5\",\"value\":\"1\"},{\"name\":\"LOC.TZNP1.XB6\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB7\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB8\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.XB9\",\"value\":\"1\"},{\"name\":\"LOC.TZNP1.XB10\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.I_set\",\"value\":\"' + I_set +'\"},{\"name\":\"LOC.TZNP1.U_set\",\"value\":\"10\"},{\"name\":\"LOC.TZNP1.T1\",\"value\":\"0.03\"},{\"name\":\"LOC.TZNP1.T2\",\"value\":\"0\"},{\"name\":\"LOC.TZNP1.T3\",\"value\":\"1\"},{\"name\":\"LOC.TZNP1.Mode\",\"value\":\"0\"}, {\"name\":\"LOC.TZNP2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PSDE.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.PTEF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.SZZ.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.TZOP.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZOF.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.XB1\",\"value\":\"1\"}, {\"name\":\"LOC.BNT.XB2\",\"value\":\"1\"}, {\"name\":\"LOC.BNT.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.BNT.K_set\",\"value\":\"15\"},{\"name\":\"LOC.BNT.K0_set\",\"value\":\"15\"},{\"name\":\"LOC.BNT.I_max\",\"value\":\"' + I_max +'\"},{\"name\":\"LOC.BNT.I0_max\",\"value\":\"' + I0_max +'\"},{\"name\":\"LOC.BNT.T_cross_block\",\"value\":\"0.06\"}, {\"name\":\"LOC.ZMN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN1.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.ZMN2.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN1.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.ZPN2.XB1\",\"value\":\"0\"},{\"name\":\"LOC.Voltage_monitoring.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.GZ.XB1\",\"value\":\"0\"},{\"name\":\"LOC.ZDZ_fider.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.UROV.XB1\",\"value\":\"0\"},{\"name\":\"LOC.APV.XB1\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB2\",\"value\":\"0\"}, {\"name\":\"LOC.APV.XB3\",\"value\":\"0\"}, {\"name\":\"LOC.ChAPV.XB1\",\"value\":\"0\"}]';\r",
+									"var encoded = encodeURI(uri);\r",
+									"pm.environment.set(\"ustavki\", encoded);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{ipARIS}}/{{ustavki}}",
+							"protocol": "http",
+							"host": [
+								"{{ipARIS}}"
+							],
+							"path": [
+								"{{ustavki}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "admin",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "admin",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

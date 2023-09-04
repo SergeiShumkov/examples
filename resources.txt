@@ -1,2 +1,8 @@
 Обучение работы в консоли
 https://overthewire.org/
+
+Статья про динамическое создание тестов:
+https://remusao.github.io/posts/pytest-param.html
+
+Библиотека jsonpickle:
+https://jsonpickle.github.io/
